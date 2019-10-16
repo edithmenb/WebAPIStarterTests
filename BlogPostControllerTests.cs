@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using webAPIStarter.Controllers;
-using webAPIStarter.Models;
+using WebAPIStarterData.Models;
 using webAPIStarter.BlogPostService;
 using Xunit;
 using FluentAssertions;
@@ -11,12 +11,12 @@ namespace WebAPIStarter.Tests
 {
     public class BlogPostControllerTests
     {
-        // private Mock<IBlogPostService> mockService = new Mock<IBlogPostService>();
+        private Mock<IBlogPostService> mockService = new Mock<IBlogPostService>();
         [Fact]
         public void GetById_WhenCalledWithExistingId_ReturnsOKResult()
         {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
+            //var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
             mockService.Setup(serv => serv.GetById(1)).Returns(fakePost);
             
             //Arrange
@@ -25,7 +25,7 @@ namespace WebAPIStarter.Tests
             //Act
             var getResult = (OkObjectResult)blogPostController.GetById(1);
 
-            var expected =  new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio"};
+            var expected =  new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio"};
 
             //Assert
             Assert.IsType<OkObjectResult>(getResult);
@@ -33,14 +33,14 @@ namespace WebAPIStarter.Tests
         [Fact]
         public void GetById_WhenCalledWithExistingId_ReturnsOKResult_UsingFluentAssertions()
         {
-            // List<PostModel> posts = new List<PostModel>{
-            //     new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio"},
-            //     new PostModel { Id = 2, Title = "Second PostModel", Author = "Edith Mendoza", Content = "Second PostModel by Edith Mendoza"},
-            //     new PostModel { Id = 3, Title = "Third PostModel", Author = "Diego", Content = "Third PostModel by Diego"}
+            // List<BlogPost> posts = new List<BlogPost>{
+            //     new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio"},
+            //     new BlogPost { Id = 2, Title = "Second BlogPost", Author = "Edith Mendoza", Content = "Second BlogPost by Edith Mendoza"},
+            //     new BlogPost { Id = 3, Title = "Third BlogPost", Author = "Diego", Content = "Third BlogPost by Diego"}
             // };
 
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
             mockService.Setup(serv => serv.GetById(1)).Returns(fakePost);
             
             //Arrange
@@ -50,15 +50,15 @@ namespace WebAPIStarter.Tests
             var getResult = (OkObjectResult)blogPostController.GetById(1);
 
             //Assert
-            var expected =  new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio"};
+            var expected =  new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio"};
             getResult.Value.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void GetById_WhenCalledWithNonExistingId_ReturnsNoContent()
         {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
             mockService.Setup(serv => serv.GetById(1)).Returns(fakePost);
             
             //Arrange
@@ -72,11 +72,11 @@ namespace WebAPIStarter.Tests
         }
 
         [Fact]
-        public void Create_WhenCalled_WithValidBlogPost_ReturnsStatusCodeResult()
+        public void Create_WhenCalled_WithValidBlogPost_ReturnsCreatedAtActionResult()
         {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
-            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" });
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
+            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" });
             //Given
             BlogPostController blogPostController = new BlogPostController(mockService.Object);
             
@@ -88,26 +88,26 @@ namespace WebAPIStarter.Tests
         }
 
         [Fact]
-        public void Create_WhenCalled_WithValidBlogPost_ReturnsStatusCodeResult_UsingFluentAssertions()
+        public void Create_WhenCalled_WithValidBlogPost_ReturnsCreatedAtActionResult_UsingFluentAssertions()
         {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
-            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" });
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
+            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" });
 
             //Given
             BlogPostController blogPostController = new BlogPostController(mockService.Object);
 
             //When
-            var getResult = (StatusCodeResult)blogPostController.InsertNewPost(fakePost);
+            var getResult = (CreatedAtActionResult)blogPostController.InsertNewPost(fakePost);
             
             //Then
-            getResult.Should().Equals(201);
+            getResult.Value.Should().Equals(new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" });
         }
 
         [Fact]
         public void Delete_WhenCalledWithExistingId_ReturnsStatusCode() {
-           var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
+        //    var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
             mockService.Setup(serv => serv.GetById(1)).Returns(fakePost);
 
             //Given
@@ -123,8 +123,8 @@ namespace WebAPIStarter.Tests
 
         [Fact]
         public void Delete_WhenCalledWithNonExistingId_ReturnsNotFound() {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
             mockService.Setup(serv => serv.GetById(1)).Returns(fakePost);
 
             //Given
@@ -139,11 +139,13 @@ namespace WebAPIStarter.Tests
 
         [Fact]
         public void Put_WhenUpdatedAPost_ReturnsStatusCode() {
-            var mockService = new Mock<IBlogPostService>();
-            var fakePost = new PostModel { Id = 1, Title = "First PostModel", Author = "Oscar Recio", Content = "First PostModel by Oscar Recio" };
-            // mockService.Setup(serv => {
-            //     serv.Update(fakePost)
-            // });
+            // var mockService = new Mock<IBlogPostService>();
+            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
+            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" });
+            
+            var fakePostUpdated = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Edith Mendoza", Content = "First BlogPost by Edith Mendoza" };
+            // mockService.Setup(serv => serv.Update(fakePostUpdated)).Returns(fakePostUpdated);
+
             //Given
             BlogPostController blogPostController = new BlogPostController(mockService.Object);
             
