@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using webAPIStarter.Controllers;
 using WebAPIStarterData.Models;
-using webAPIStarter.BlogPostService;
+using webAPIStarter.Services.BlogPostService;
 using Xunit;
 using FluentAssertions;
 using Moq;
@@ -12,6 +12,7 @@ namespace WebAPIStarter.Tests
     public class BlogPostControllerTests
     {
         private Mock<IBlogPostService> mockService = new Mock<IBlogPostService>();
+        private InMemoryBlogPostService inMemoryService = new InMemoryBlogPostService();
         [Fact]
         public void GetById_WhenCalledWithExistingId_ReturnsOKResult()
         {
@@ -139,18 +140,23 @@ namespace WebAPIStarter.Tests
 
         [Fact]
         public void Put_WhenUpdatedAPost_ReturnsStatusCode() {
-            // var mockService = new Mock<IBlogPostService>();
-            var fakePost = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" };
-            mockService.Setup(serv => serv.Insert(fakePost)).Returns(new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio" });
-            
-            var fakePostUpdated = new BlogPost { Id = 1, Title = "First BlogPost", Author = "Edith Mendoza", Content = "First BlogPost by Edith Mendoza" };
-            // mockService.Setup(serv => serv.Update(fakePostUpdated)).Returns(fakePostUpdated);
-
+            List<BlogPost>posts = new List<BlogPost>{
+                new BlogPost { Id = 1, Title = "First BlogPost", Author = "Oscar Recio", Content = "First BlogPost by Oscar Recio"},
+                new BlogPost { Id = 2, Title = "Second BlogPost", Author = "Edith Mendoza", Content = "Second BlogPost by Edith Mendoza"},
+                new BlogPost { Id = 3, Title = "Third BlogPost", Author = "Diego", Content = "Third BlogPost by Diego"}
+            };
             //Given
-            BlogPostController blogPostController = new BlogPostController(mockService.Object);
-            
+            BlogPostController blogPostController = new BlogPostController(inMemoryService);
+            BlogPost post = new BlogPost
+            {
+                Id = 1,
+                Title = "Blog Post",
+                Author = "Roberto",
+                Content = "Fourth Blog Post by Roberto"
+            };
+
             //When
-            var getResult = blogPostController.Put(fakePost);
+            var getResult = blogPostController.Put(post);
 
             //Then
             Assert.IsType<OkResult>(getResult);
